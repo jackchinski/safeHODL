@@ -1,60 +1,21 @@
 "use client";
-import type { UseWaitForTransactionReceiptReturnType } from "wagmi";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect } from "react";
 import useMultiBaas from "../hooks/useMultiBaas";
 
-interface EventInput {
-  name: string;
-  type: string;
-  value: string;
-}
+const Events: React.FC = () => {
+  const {
+    fetchStats,
+    isFetching,
+    lockBoxesCount,
+    opensCount,
+    recentLockBoxes,
+    recentOpens,
+  } = useMultiBaas();
 
-interface EventData {
-  event: {
-    name: string;
-    inputs: EventInput[];
-  };
-  triggeredAt: string;
-  transaction: {
-    txHash: string;
-  };
-}
-
-interface EventsProps {
-  txReceipt: UseWaitForTransactionReceiptReturnType['data'] | undefined;
-}
-
-const Events: React.FC<EventsProps> = ({ txReceipt }) => {
-  const { getVotedEvents } = useMultiBaas();
-  const [events, setEvents] = useState<EventData[]>([]);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-
-  // Wrap fetchEvents with useCallback
-  const fetchEvents = useCallback(async () => {
-    setIsFetching(true);
-    try {
-      const fetchedEvents = await getVotedEvents();
-      if (fetchedEvents) {
-        setEvents(fetchedEvents);
-      }
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    } finally {
-      setIsFetching(false);
-    }
-  }, [getVotedEvents]);
-
-  // Fetch events on component mount
   useEffect(() => {
-    fetchEvents();
+    fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Fetch events whenever txReceipt changes
-  useEffect(() => {
-    if (txReceipt) {
-      fetchEvents();
-    }
-  }, [txReceipt, fetchEvents]);
 
   return (
     <div className="container">
@@ -65,29 +26,25 @@ const Events: React.FC<EventsProps> = ({ txReceipt }) => {
             <div className="spinner"></div>
           </div>
         )}
-        {!isFetching && events.length === 0 ? (
-          <p>No events found.</p>
-        ) : (
-          <ul className="events-list">
-            {events.map((event, index) => (
-              <li key={index} className="event-item">
-                <div className="event-name">
-                  <strong>{event.event.name}</strong> - {event.triggeredAt}
-                </div>
-                <div className="event-details">
-                  {event.event.inputs.map((input, idx) => (
-                    <p key={idx}>
-                      <strong>{input.name}:</strong> {input.value}
-                    </p>
-                  ))}
-                  <p>
-                    <strong>Transaction Hash:</strong> {event.transaction.txHash}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div>
+          <div className="event">
+            <h2>Lock Boxes</h2>
+            <p>{lockBoxesCount}</p>
+          </div>
+          <div className="event">
+            <h2>Opens</h2>
+            <p>{opensCount}</p>
+          </div>
+        </div>
+        <div>
+          <div className="event">
+            <h2>Recent Lock Boxes</h2>
+          </div>
+          <div className="event">
+            <h2>Recent Opens</h2>
+            <p>{opensCount}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

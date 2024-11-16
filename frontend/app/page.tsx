@@ -1,14 +1,11 @@
 "use client";
 
-import type { UseWaitForTransactionReceiptReturnType } from "wagmi";
-import React, { useState } from "react";
+import React from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Voting from "./components/Voting";
+import Voting from "./components/Locking";
 import Events from "./components/Events";
 
 const Home: React.FC = () => {
-  const [txReceipt, setTxReceipt] = useState<UseWaitForTransactionReceiptReturnType['data']>();
-
   return (
     <div>
       <div className="navbar">
@@ -16,8 +13,8 @@ const Home: React.FC = () => {
         <ConnectButton />
       </div>
       <div>
-        <Voting setTxReceipt={setTxReceipt} />
-        <Events txReceipt={txReceipt} />
+        <Voting />
+        <Events />
       </div>
     </div>
   );
