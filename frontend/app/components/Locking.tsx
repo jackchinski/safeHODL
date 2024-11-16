@@ -63,10 +63,12 @@ const Voting: React.FC = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Secure Your Assets</h1>
+      <h1 className="title">HODL your ass-ets in peace</h1>
       {!isConnected ? (
         <div className="text-center p-8 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 mb-4">Connect your wallet to start securing your assets</p>
+          <p className="text-gray-600 mb-4">
+            Connect your wallet to start securing your assets
+          </p>
           <button onClick={openConnectModal} className="btn btn-primary">
             Connect Wallet
           </button>
@@ -78,41 +80,87 @@ const Voting: React.FC = () => {
               <div className="spinner" />
             </div>
           )}
-          
+
           {/* Common Credentials Section */}
           <div className="bg-gray-50 p-6 rounded-lg">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">Your Credentials</h3>
+            <h3 className="text-lg font-medium text-gray-800 mb-4">
+              Your Credentials
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              These credentials are required for all operations
+            </p>
             <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-field"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-field"
-              />
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input-field"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input-field"
+                />
+              </div>
             </div>
           </div>
 
           {/* Lock Section */}
           <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">Lock Tokens</h3>
-            <div className="flex gap-4">
-              <input
-                type="number"
-                placeholder="Amount to Lock"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="input-field"
-              />
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Lock</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Lock your tokens by specifying the amount in Wei
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="amount"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Amount (Wei)
+                </label>
+                <input
+                  id="amount"
+                  type="text"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="input-field mb-2"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setAmount("1000000000")}
+                    className="btn btn-secondary text-sm"
+                  >
+                    1 Gwei
+                  </button>
+                  <button
+                    onClick={() => setAmount("1000000000000000000")}
+                    className="btn btn-secondary text-sm"
+                  >
+                    1 MATIC
+                  </button>
+                </div>
+              </div>
               <button
-                className="btn btn-primary"
+                className="btn btn-primary w-full"
                 disabled={!email || !password || !amount}
                 onClick={(e) => {
                   e.preventDefault();
@@ -126,17 +174,28 @@ const Voting: React.FC = () => {
 
           {/* Unlock Section */}
           <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">Unlock Tokens</h3>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Recipient Address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="input-field"
-              />
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Unlock</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Specify the recipient address to unlock your tokens
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Recipient Address
+                </label>
+                <input
+                  id="address"
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="input-field"
+                />
+              </div>
               <button
-                className="btn btn-primary"
+                className="btn btn-primary w-full"
                 disabled={!email || !password || !address}
                 onClick={(e) => {
                   e.preventDefault();
