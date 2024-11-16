@@ -9,7 +9,7 @@ import {
 import useMultiBaas from "../hooks/useMultiBaas";
 
 const Voting: React.FC = () => {
-  const { lock } = useMultiBaas();
+  const { lock, unlock } = useMultiBaas();
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { sendTransactionAsync } = useSendTransaction();
@@ -18,6 +18,7 @@ const Voting: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
 
   const { isLoading: isTxProcessing } = useWaitForTransactionReceipt({
     hash: txHash,
@@ -26,7 +27,7 @@ const Voting: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleLock = async (
     email: string,
-    passwordAndEmailHash: string,
+    password: string,
     amount: string
   ) => {
     if (!isConnected) {
@@ -34,7 +35,25 @@ const Voting: React.FC = () => {
       return;
     }
     try {
-      const tx = await lock(email, passwordAndEmailHash, amount);
+      const tx = await lock(email, password, amount);
+      const hash = await sendTransactionAsync(tx);
+      setTxHash(hash);
+    } catch (error) {
+      console.error("Error sending transaction:", error);
+    }
+  };
+
+  const handleUnlock = async (
+    email: string,
+    password: string,
+    address: string
+  ) => {
+    if (!isConnected) {
+      openConnectModal?.();
+      return;
+    }
+    try {
+      const tx = await unlock(email, password, address);
       const hash = await sendTransactionAsync(tx);
       setTxHash(hash);
     } catch (error) {
@@ -48,44 +67,70 @@ const Voting: React.FC = () => {
       {!isConnected ? (
         <div className="text-center">Please connect your wallet to hodl!</div>
       ) : (
-        <div className="spinner-parent">
-          {isTxProcessing && (
-            <div className="overlay">
-              <div className="spinner"></div>
+        <>
+          <div className="spinner-parent">
+            {isTxProcessing && (
+              <div className="overlay">
+                <div className="spinner"></div>
+              </div>
+            )}
+            <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
+                <input
+                  type="text"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <input
+                type="number"
+                placeholder="Amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLock(email, password, amount);
+                }}
+              >
+                Lock
+              </button>
             </div>
-          )}
-          <div className="flex gap-2">
-            <div className="flex flex-col gap-2">
+          </div>
+          <div className="spinner-parent mt-8">
+            {isTxProcessing && (
+              <div className="overlay">
+                <div className="spinner"></div>
+              </div>
+            )}
+            <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleUnlock(email, password, address);
+                }}
+              >
+                Unlock
+              </button>
             </div>
-            <input
-              type="number"
-              placeholder="Amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-            <button
-              className="btn btn-primary"
-              onClick={(e) => {
-                e.preventDefault();
-                handleLock(email, password, amount);
-              }}
-            >
-              Lock
-            </button>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
