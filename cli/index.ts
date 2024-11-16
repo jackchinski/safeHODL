@@ -6,10 +6,16 @@ import {Command} from "commander";
 
 import chalk from 'chalk';
 import fs from 'fs';
-import path from 'path';
 
+import path from 'path';
+import express, { Request, Response } from "express";
+import { createServer } from 'http';
+
+import bodyParser from "body-parser";
 import * as dotenv from 'dotenv'
 dotenv.config()
+
+import nodemailer from 'nodemailer';
 
 
 const readlineSync = require('readline-sync');
@@ -32,6 +38,50 @@ const rpc_mantle = process.env.MANTLE_RPC_URL || "";
 
 const contractABIpath = path.join(__dirname, 'ABIs/abi.json');
 const contractABI = JSON.parse(fs.readFileSync(contractABIpath, 'utf8'));
+
+
+const transporter = nodemailer.createTransport({
+    host: 'live.smtp.mailtrap.io',
+    port: 587,
+    secure: false, // use SSL
+    auth: {
+      user: '1a2b3c4d5e6f7g',
+      pass: '1a2b3c4d5e6f7g',
+    }
+});
+
+
+const app = express();
+const httpServer = createServer(app);
+const port = 3000;
+
+
+// logger middleware
+app.use((req,res,next) =>{
+    logger.debug(req.method,req.hostname, req.path, req.time);
+    next();
+  });
+  
+  
+  app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    );
+  
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-Requested-With,content-type"
+    );
+  
+    next();
+  });
+  
+  app.use(bodyParser.json());
+
+
 
 
 figlet("SafeHODL", async function (err, data) {
@@ -115,7 +165,7 @@ figlet("SafeHODL", async function (err, data) {
                 }
             );
     
-            log(chalk.blue('TX sent. Hash: ' + tx.hash));
+            log(chalk.blue('Funds locked. TX sent. Hash: ' + tx.hash));
     
         } else if (actionToDo == 2) {
             // Unlock
@@ -129,16 +179,42 @@ figlet("SafeHODL", async function (err, data) {
                 receiverAddress
             );
     
-            log(chalk.blue('TX sent. Hash: ' + tx.hash));
+            log(chalk.blue('Funds unlocked. TX sent. Hash: ' + tx.hash));
         }
     }
-
    
 
    
 
 });
 
+app.put("/handle_curvegrid_webhook", async (req: Request, res: Response) => {
+    var webhookContent = JSON.parse(req.body);
+    console.log("Webhook received");
+    console.log(webhookContent);
+
+     // Listen to ewents of new lockings
+     const mailOptions = {
+        from: 'yourusername@email.com',
+        to: emailFromEvent,
+        subject: 'You have incoming blockchain transfer',
+        text: 'You can unlock vault and receive locked tokens. Total amount of locked tokens: Locked by: '
+    };
+
+    console.log("New locking observed. Sending email");
+    console.log(mailOptions);
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+        console.log('Error:', error);
+        } else {
+        console.log('Email sent:', info.response);
+        }
+    });
+
+    res.json({success: true});
+  });
 
 
-
+async function sendMail() {
+   
+}
