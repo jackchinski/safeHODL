@@ -138,7 +138,7 @@ const useMultiBaas = () => {
         addressLabel,
         contractLabel,
         eventSignature,
-        15
+        5
       );
 
       return response.data.result.map(parseEvent);
@@ -164,7 +164,7 @@ const useMultiBaas = () => {
         addressLabel,
         contractLabel,
         eventSignature,
-        15
+        5
       );
 
       return response.data.result.map(parseEvent);
