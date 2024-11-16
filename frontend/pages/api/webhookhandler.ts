@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+//import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 const axios = require('axios');
 
-const mailerSend = new MailerSend({
-  apiKey: process.env.MAILERSEND_API_KEY || "",
-});
+// const mailerSend = new MailerSend({
+//   apiKey: process.env.MAILERSEND_API_KEY || "",
+// });
 
 var mailerApiKey = process.env.MAILERSEND_API_KEY || "";
 
