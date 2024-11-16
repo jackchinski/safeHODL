@@ -105,13 +105,6 @@ const Voting: React.FC = () => {
                 Lock
               </button>
             </div>
-          </div>
-          <div className="spinner-parent mt-8">
-            {isTxProcessing && (
-              <div className="overlay">
-                <div className="spinner"></div>
-              </div>
-            )}
             <div className="flex gap-2">
               <input
                 type="text"
