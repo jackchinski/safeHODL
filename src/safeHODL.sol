@@ -37,7 +37,7 @@ contract SafeHodl {
         LockBox memory correctLockBox = vault[passwordAndEmailHash];
 
         // check that the hash exists in the storage
-        require(vault[passwordAndEmailHash] != 0, "There is no Lockbox with the following email and password.");
+        require(correctLockBox.amount > 0, "There is no Lockbox with the following email and password.");
 
         // check that the hashes match
         require(correctLockBox.identifier == passwordAndEmailHash, "Hashes do not match!");
