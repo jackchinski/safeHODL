@@ -84,10 +84,10 @@ const Voting: React.FC = () => {
           {/* Common Credentials Section */}
           <div className="bg-gray-50 p-6 rounded-lg">
             <h3 className="text-lg font-medium text-gray-800 mb-4">
-              Your Credentials
+              Credentials
             </h3>
             <p className="text-sm text-gray-500 mb-4">
-              These credentials are required for all operations
+              Set the credentials, either for locking or unlocking.
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -176,7 +176,7 @@ const Voting: React.FC = () => {
           <div className="border rounded-lg p-6">
             <h3 className="text-lg font-medium text-gray-800 mb-4">Unlock</h3>
             <p className="text-sm text-gray-500 mb-4">
-              Specify the recipient address to unlock your tokens
+              Specify the recipient address to send the unlocked tokens to
             </p>
             <div className="space-y-4">
               <div>
