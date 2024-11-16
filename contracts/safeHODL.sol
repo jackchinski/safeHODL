@@ -10,7 +10,6 @@ contract SafeHodl {
     event LockBoxOpened(string email);
 
     struct LockBox {
-        bytes32 identifier; // hash of email and password
         string email;
         uint256 amount; // how much is stored in this lockbox
     }
@@ -24,7 +23,6 @@ contract SafeHodl {
 
         // save the information
         vault[_passwordAndEmailHash] = LockBox({
-            identifier: _passwordAndEmailHash,
             email: _email,
             amount: msg.value
         });
@@ -55,11 +53,6 @@ contract SafeHodl {
             "There is no Lockbox with the following email and password."
         );
 
-        // check that the hashes match
-        require(
-            correctLockBox.identifier == passwordAndEmailHash,
-            "Hashes do not match!"
-        );
         // check that the contract has enough funds to make the transfer
         require(address(this).balance >= correctLockBox.amount);
 
