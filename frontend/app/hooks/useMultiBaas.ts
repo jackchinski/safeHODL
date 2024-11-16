@@ -102,7 +102,6 @@ const useMultiBaas = () => {
       amount: string
     ): Promise<SendTransactionParameters> => {
       const passwordAndEmailHash = hashEmailAndPassword(email, password);
-      console.log(passwordAndEmailHash);
       return await callContractFunction(
         "lock",
         [email, passwordAndEmailHash],
@@ -267,7 +266,6 @@ export default useMultiBaas;
 
 const parseEvent = (e: Event): ParsedEvent => {
   if (!e.event.rawFields) throw Error("Missing Raw Fields");
-  console.log(JSON.parse(e.event.rawFields));
   const { data, transactionHash, blockNumber } = JSON.parse(
     e.event.rawFields
   ) as {

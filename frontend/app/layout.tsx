@@ -4,8 +4,8 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Simple Voting DApp - Powered by MultiBaas",
-  description: "Frontend-only DApp to interact with a voting contract on Ethereum",
+  title: "Safe HODL !!!",
+  description: "HODLing but safe, nice features, come check it out!",
 };
 
 export default function RootLayout({
