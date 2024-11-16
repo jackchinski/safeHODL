@@ -14,7 +14,8 @@ import { createServer } from 'http';
 import bodyParser from "body-parser";
 import * as dotenv from 'dotenv'
 dotenv.config()
-
+import cliSpinners from 'cli-spinners';
+import ora from 'ora';
 import nodemailer from 'nodemailer';
 
 
@@ -83,7 +84,7 @@ app.use((req,res,next) =>{
 
 
 
-
+log(chalk.green('Welcome to '))
 figlet("SafeHODL", async function (err, data) {
   if (err) {
     console.log("Something went wrong...");
@@ -144,7 +145,8 @@ figlet("SafeHODL", async function (err, data) {
     }
 
     async function callContract(safeHODLContract, actionToDo) {
-        console.log(actionToDo);
+        //console.log(actionToDo);
+       
         if (actionToDo == 1) {
             log(chalk.green('Selected Lock'))
         
@@ -156,16 +158,31 @@ figlet("SafeHODL", async function (err, data) {
             // Offline calculate the locking hash
             const lockingHash = solidityPackedKeccak256([ "string", "string" ], [ receiverEmail, password ]);
     
+
+            const spinner = ora('Locking in progress...').start();
+
+            setTimeout(() => {
+                spinner.color = 'yellow';
+                spinner.text = 'Still locking in progress...';
+            }, 5000);
+
+            try {
+                const tx = await safeHODLContract.lock(
+                    receiverEmail,
+                    lockingHash,
+                    {
+                        value: String(amountToLock),
+                    }
+                );
+
+                spinner.succeed(chalk.blue('🐱 Funds locked. TX sent. Hash: ' + tx.hash));
+            } catch (error) {
+                // If there's an error
+                spinner.fail('Locking failed. Please try again.');
+                console.error('Error during locking:', error);
+            }
+
     
-            const tx = await safeHODLContract.lock(
-                receiverEmail,
-                lockingHash,
-                {
-                  value: String(amountToLock),
-                }
-            );
-    
-            log(chalk.blue('Funds locked. TX sent. Hash: ' + tx.hash));
     
         } else if (actionToDo == 2) {
             // Unlock
@@ -173,13 +190,28 @@ figlet("SafeHODL", async function (err, data) {
             const password = readlineSync.question(log(chalk.blue('Provide your password')));
             const receiverAddress = readlineSync.question(log(chalk.blue('Provide destination address:')));
     
-            const tx = await safeHODLContract.unlock(
-                receiverEmail,
-                password,
-                receiverAddress
-            );
+            const spinner = ora('🔑 Unlocking in progress...').start();
+
+            setTimeout(() => {
+                spinner.color = 'yellow';
+                spinner.text = 'Still unlocking in progress...';
+            }, 5000);
+
+            try {
+                const tx = await safeHODLContract.unlock(
+                    receiverEmail,
+                    password,
+                    receiverAddress
+                );
+
+                spinner.succeed(chalk.blue('🐱 Funds unlocked. TX sent. Hash: ' + tx.hash));
+            } catch (error) {
+                // If there's an error
+                spinner.fail('Locking failed. Please try again.');
+                console.error('Error during locking:', error);
+            }
+
     
-            log(chalk.blue('Funds unlocked. TX sent. Hash: ' + tx.hash));
         }
     }
    
