@@ -17,6 +17,9 @@ importers:
       commander:
         specifier: ^12.1.0
         version: 12.1.0
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       ethers:
         specifier: ^6.13.4
         version: 6.13.4
@@ -97,6 +100,10 @@ packages:
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
+
+  dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
 
   ethers@6.13.4:
     resolution: {integrity: sha512-21YtnZVg4/zKkCQPjrDj38B1r4nQvTZLopUGMLQ1ePU2zV/joCfDC3t3iKQjWRzjjjbzR+mdAIoikeBRNkdllA==}
@@ -183,6 +190,8 @@ snapshots:
   chalk@5.3.0: {}
 
   commander@12.1.0: {}
+
+  dotenv@16.4.5: {}
 
   ethers@6.13.4:
     dependencies:
