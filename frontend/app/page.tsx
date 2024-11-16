@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         </div>
         <ConnectButton />
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <Voting />
           <Events />
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
           href="https://github.com/jackchinski/safeHODL"
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-secondary w-full flex items-center justify-center gap-2 mb-16"
+          className="btn btn-secondary w-full flex items-center justify-center gap-2 mb-16 text-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
