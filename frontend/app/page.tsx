@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <div className="navbar">
-        <h1 className="app-title">Simple Voting DApp</h1>
+        <h1 className="app-title">Safe HODL !!!</h1>
         <ConnectButton />
       </div>
       <div>
