@@ -19,6 +19,8 @@ const Voting: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [isLocking, setIsLocking] = useState(false);
+  const [isUnlocking, setIsUnlocking] = useState(false);
 
   const { isLoading: isTxProcessing } = useWaitForTransactionReceipt({
     hash: txHash,
@@ -34,12 +36,15 @@ const Voting: React.FC = () => {
       openConnectModal?.();
       return;
     }
+    setIsLocking(true);
     try {
       const tx = await lock(email, password, amount);
       const hash = await sendTransactionAsync(tx);
       setTxHash(hash);
     } catch (error) {
       console.error("Error sending transaction:", error);
+    } finally {
+      setIsLocking(false);
     }
   };
 
@@ -52,12 +57,15 @@ const Voting: React.FC = () => {
       openConnectModal?.();
       return;
     }
+    setIsUnlocking(true);
     try {
       const tx = await unlock(email, password, address);
       const hash = await sendTransactionAsync(tx);
       setTxHash(hash);
     } catch (error) {
       console.error("Error sending transaction:", error);
+    } finally {
+      setIsUnlocking(false);
     }
   };
 
@@ -161,13 +169,20 @@ const Voting: React.FC = () => {
               </div>
               <button
                 className="btn btn-primary w-full"
-                disabled={!email || !password || !amount}
+                disabled={!email || !password || !amount || isLocking}
                 onClick={(e) => {
                   e.preventDefault();
                   handleLock(email, password, amount);
                 }}
               >
-                Lock Tokens
+                {isLocking ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Locking...</span>
+                  </div>
+                ) : (
+                  "Lock Tokens"
+                )}
               </button>
             </div>
           </div>
@@ -196,15 +211,39 @@ const Voting: React.FC = () => {
               </div>
               <button
                 className="btn btn-primary w-full"
-                disabled={!email || !password || !address}
+                disabled={!email || !password || !address || isUnlocking}
                 onClick={(e) => {
                   e.preventDefault();
                   handleUnlock(email, password, address);
                 }}
               >
-                Unlock Tokens
+                {isUnlocking ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Unlocking...</span>
+                  </div>
+                ) : (
+                  "Unlock Tokens"
+                )}
               </button>
             </div>
+          </div>
+
+          <div className="border rounded-lg p-6 mb-8">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Contract</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              View the smart contract on Polygon Amoy Explorer
+              <br />
+              Address: 0x1f098dd7680092470c67483d99cfd5db57972d46
+            </p>
+            <a
+              href="https://amoy.polygonscan.com/address/0x1f098dd7680092470c67483d99cfd5db57972d46"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-secondary w-full text-center"
+            >
+              View Contract
+            </a>
           </div>
         </div>
       )}

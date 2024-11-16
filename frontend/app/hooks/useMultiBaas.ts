@@ -220,31 +220,29 @@ const useMultiBaas = () => {
     }
   }, [eventsApi, chain, addressLabel, contractLabel]);
 
-  const fetchStats = useCallback(async () => {
-    setIsFetching(true);
-    try {
-      const newLockBoxesCount = await getAllLockBoxesCount();
-      if (newLockBoxesCount !== null) setLockBoxesCount(newLockBoxesCount);
+  const fetchStats = useCallback(
+    async (notify: boolean = true) => {
+      if (notify) setIsFetching(true);
+      try {
+        const newLockBoxesCount = await getAllLockBoxesCount();
+        if (newLockBoxesCount !== null) setLockBoxesCount(newLockBoxesCount);
 
-      const newOpensCount = await getAllOpensCount();
-      if (newOpensCount !== null) setOpensCount(newOpensCount);
+        const newOpensCount = await getAllOpensCount();
+        if (newOpensCount !== null) setOpensCount(newOpensCount);
 
-      const newRecentLockBoxes = await getRecentLockBoxes();
-      if (newOpensCount !== null) setRecentLockBoxes(newRecentLockBoxes!);
+        const newRecentLockBoxes = await getRecentLockBoxes();
+        if (newOpensCount !== null) setRecentLockBoxes(newRecentLockBoxes!);
 
-      const newRecentOpens = await getRecentOpens();
-      if (newOpensCount !== null) setRecentOpens(newRecentOpens!);
-    } catch (error) {
-      console.error("Error fetching votes:", error);
-    } finally {
-      setIsFetching(false);
-    }
-  }, [
-    getAllLockBoxesCount,
-    getAllOpensCount,
-    getRecentLockBoxes,
-    getRecentOpens,
-  ]);
+        const newRecentOpens = await getRecentOpens();
+        if (newOpensCount !== null) setRecentOpens(newRecentOpens!);
+      } catch (error) {
+        console.error("Error fetching votes:", error);
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [getAllLockBoxesCount, getAllOpensCount, getRecentLockBoxes, getRecentOpens]
+  );
 
   return {
     lock,
