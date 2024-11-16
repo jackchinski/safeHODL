@@ -37,7 +37,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     // Process a POST request
 
-    var webhookContent = JSON.parse(req.body);
+   // var webhookContent = JSON.parse(req.body);
+    var webhookContent = req.body;
     console.log(webhookContent);
     
     if (webhookContent[0].data.event.name == "NewLockBox") {
