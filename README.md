@@ -4,8 +4,8 @@
 
 ## Works with:
 
-| Chain    | UI  | CLI |
-| -------- | --- | --- |
-| UniChain | 🔜  | ✅  |
-| Polygon  | ✅  | ✅  |
-| Mantle   | 🔜  | ✅  |
+| Chain    | UI  | CLI | Contracts |
+| :------- | :-: | :-: | :-------: |
+| UniChain | 🔜  | ✅  |    ✅     |
+| Polygon  | ✅  | ✅  |    ✅     |
+| Mantle   | 🔜  | ✅  |    ✅     |
