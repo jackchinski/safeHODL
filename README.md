@@ -1,5 +1,11 @@
-# safeHODL
+# [Safe HODL](https://hodl.energia.dev/)
 
-unichain
-polyon
-mantle
+## Use it here: [hodl.energia.dev](https://hodl.energia.dev/) !!!!
+
+## Works with:
+
+| Chain    | UI  | CLI |
+| -------- | --- | --- |
+| UniChain | 🔜  | ✅  |
+| Polygon  | ✅  | ✅  |
+| Mantle   | 🔜  | ✅  |
