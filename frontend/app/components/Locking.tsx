@@ -63,67 +63,91 @@ const Voting: React.FC = () => {
 
   return (
     <div className="container">
-      <h1 className="title">HODL your money, securely though</h1>
+      <h1 className="title">Secure Your Assets</h1>
       {!isConnected ? (
-        <div className="text-center">Please connect your wallet to hodl!</div>
+        <div className="text-center p-8 bg-gray-50 rounded-lg">
+          <p className="text-gray-600 mb-4">Connect your wallet to start securing your assets</p>
+          <button onClick={openConnectModal} className="btn btn-primary">
+            Connect Wallet
+          </button>
+        </div>
       ) : (
-        <>
-          <div className="spinner-parent">
-            {isTxProcessing && (
-              <div className="overlay">
-                <div className="spinner"></div>
-              </div>
-            )}
-            <div className="flex gap-2">
-              <div className="flex flex-col gap-2">
-                <input
-                  type="text"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+        <div className="spinner-parent space-y-8">
+          {isTxProcessing && (
+            <div className="overlay">
+              <div className="spinner" />
+            </div>
+          )}
+          
+          {/* Common Credentials Section */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Your Credentials</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
+              />
+            </div>
+          </div>
+
+          {/* Lock Section */}
+          <div className="border rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Lock Tokens</h3>
+            <div className="flex gap-4">
               <input
                 type="number"
-                placeholder="Amount"
+                placeholder="Amount to Lock"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                className="input-field"
               />
               <button
                 className="btn btn-primary"
+                disabled={!email || !password || !amount}
                 onClick={(e) => {
                   e.preventDefault();
                   handleLock(email, password, amount);
                 }}
               >
-                Lock
+                Lock Tokens
               </button>
             </div>
-            <div className="flex gap-2">
+          </div>
+
+          {/* Unlock Section */}
+          <div className="border rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Unlock Tokens</h3>
+            <div className="flex gap-4">
               <input
                 type="text"
-                placeholder="Address"
+                placeholder="Recipient Address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                className="input-field"
               />
               <button
                 className="btn btn-primary"
+                disabled={!email || !password || !address}
                 onClick={(e) => {
                   e.preventDefault();
                   handleUnlock(email, password, address);
                 }}
               >
-                Unlock
+                Unlock Tokens
               </button>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
